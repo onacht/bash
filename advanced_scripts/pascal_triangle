@@ -1,0 +1,46 @@
+#!/bin/bash
+# written by Ofek Nacht 06/12/2021
+# function that prints varible n times
+# print spaces needed for triangle
+repeat(){
+for (( i=$space;i<$answer;i++ ))
+do
+  numof+=' '  
+done
+}
+
+# calculating every line
+calculation() {
+newarr=()
+newarr+=(${arr[0]})
+for (( i=1;i<${#arr[@]};i++))
+do
+  calc=$(( ${arr[$i - 1]} + ${arr[$i]} )) 
+  newarr+=($calc) 
+done
+newarr+=(${arr[-1]})
+echo "$numof${newarr[@]}"
+}
+
+# print pascal triangle
+# get user input
+read -p 'enter num rows for triangle ' answer
+space="1"
+arr=(1)
+
+# prints first line with right amount of spaces
+for core in $(seq 1 $answer);
+do 
+  first+=' '
+done
+echo "$first${arr[@]}"
+
+# main
+while [ $space -lt $answer ]
+do
+  numof=""
+  repeat
+  (( space++))
+  calculation
+  arr=(${newarr[@]})
+done

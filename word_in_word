@@ -1,0 +1,28 @@
+#!/bin/bash
+# check if word is within word
+read -p 'please enter sentence :' answer
+arr=($answer)
+d=0
+
+#  function check if word is in a word
+word() {
+if [[ $i = $d ]]
+then
+  : 
+elif [[ ${arr[$d]} =~ "${arr[$i]}" ]]
+then 
+  echo "${arr[$i]} is in ${arr[$d]}"
+fi
+(( i++ ))
+}
+
+# loop through sentnce
+for j in ${arr[@]}
+do
+  i=0
+  for k in ${arr[@]}
+  do
+    word
+  done
+  (( d++ ))
+done

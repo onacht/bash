@@ -1,0 +1,51 @@
+#!/bin/bash
+# check if word is assembeld frim the same letters
+read -p 'answer :' answer
+arr=($answer)
+
+# function that compare letters
+help_letters() {
+# loop through one letter and compare to the rest
+for l in $(seq 1 ${#arr[$d]})
+do
+  for f in $(seq 1 ${#arr[$d]})
+  do
+    check1=$( echo ${arr[$i]} | cut -c $l )
+    check2=$( echo ${arr[$d]} | cut -c $f )
+    if [[ $check1 =~ $check2 ]]
+    then
+      (( same++ ))
+      if [[ $same -eq ${#arr[$d]} ]]
+      then
+        echo "same ${arr[$i]} and ${arr[$d]}"
+      fi
+    fi
+  done
+done
+  }
+  
+# function that check words
+letters() {
+if [[ $i -eq $d ]]
+  then
+   : 
+elif [[ ${#arr[$d]} -eq ${#arr[$i]} ]]
+then
+  help_letters
+fi
+(( i++ ))
+}
+
+# main
+d=0
+# loop through one word and compare to the rest
+for j in ${arr[@]}
+do
+  i=0
+  same=0
+  for (( k=1; k<${#arr[@]}; k++ ))
+  do
+    letters
+  done
+  (( d++ ))
+done

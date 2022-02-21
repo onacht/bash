@@ -1,0 +1,47 @@
+#!/bin/bash
+# playig 2/3 average game
+# written by Ofek Nacht
+
+# function that cjecks who is the closest
+check_winner() {
+calc=$(( $avg - ${arr[$i - 1]} ))
+# absolute number is needed
+acalc=${calc#-}
+if (( $acalc < $close ))
+then
+  close=$acalc
+  winner=$i
+elif [[ $calc -eq $close ]]
+then
+  winner="$winner and player$i"
+fi
+}
+
+close=101
+sum=0
+check="5"
+
+# choose how many players will play
+read -p 'enter number of players :' players
+# accepting answers from players
+for (( i=1; i<=$players; i++ ))
+do
+  read -p "player$i answer is: " answer
+  if ! (( $answer >= 0 && $answer <= 100 ))
+  then
+    echo not valid number
+    (( i-- ))
+  else
+    arr+=($answer)
+    sum=$(( $sum + $answer ))
+  fi
+done
+
+avg=$(( $sum / $players * 2/3 ))
+# looping through array and check who is the winner
+for (( i=1; i<=${#arr[@]}; i++ ))
+do
+  check_winner
+done
+echo $avg
+echo "the winner is player$winner "

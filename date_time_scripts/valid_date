@@ -1,0 +1,10 @@
+#!/bin/bash
+# check valid date
+read -p 'enter valid date : ' date
+valid_date='^[1-9]?/[1-9]/[1-9][0-9][0-9][0-9]$|1[0-2]/[1-9][0-9][0-9][0-9]$|^[12][0-9]?/[1-9]/[1-9][0-9][0-9][0-9]$|1[0-2]/[1-9][0-9][0-9][0-9]$|^3[01]?/[1-9]$|1[0-2]/[1-9][0-9][0-9][0-9]$'
+if [[ $date =~ $valid_date ]]
+then
+  echo date is valid
+else 
+  echo date is invalid
+fi

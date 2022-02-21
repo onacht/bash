@@ -1,0 +1,89 @@
+#!/bin/bash
+# tic tac toe !!!!
+# ofek nacht 01/12/2021
+# set players answers and turn number 
+# in order to keep track
+player_1="x"
+player_2="O"
+turn=1
+spots=( 1 2 3 4 5 6 7 8 9 )
+
+# all match possibilities
+game_status() {
+if [[ ${spots[$1]} =~ ${spots[$2]} && ${spots[$2]} =~ ${spots[$3]} ]] 
+then
+  echo game over
+  turn=100
+  if [[ ${spots[$1]} =~ $player_1 ]]
+  then
+    echo player1 is the winner!!!
+  else
+    echo player2 is the winner!!!
+  fi
+fi
+
+# checking match possibilties to see who is the winner
+}
+
+game_winner() {
+game_status 0 1 2
+game_status 3 4 5
+game_status 6 7 8
+game_status 0 3 6
+game_status 1 4 7
+game_status 2 5 8
+game_status 0 4 8
+game_status 2 4 6
+if [ $turn -eq 10 ]
+ then
+    echo "game over" 
+    echo "Its a draw!"
+  fi
+}
+
+# show board function
+print_board() {
+clear
+echo ${spots[@]} | awk '{OFS=" | "; print$1,$2,$3}'
+echo ----------
+echo ${spots[@]} | awk '{OFS=" | "; print$4,$5,$6}'
+echo ----------
+echo ${spots[@]} | awk '{OFS=" | "; print$7,$8,$9}' 
+}
+print_board
+# loop through game
+while [ $turn -le 9 ]
+do
+# check whose turn it is
+  if (( $turn % 2 == 1 ))
+  then
+# accepting answer from player 1
+    read -p 'player 1 turn:' answer1
+# checking if number is valid and spot is not already taken (player1)
+    if [[ ${spots[$answer1 - 1]} =~  $player_1 ]] || [[ ${spots[$answer1 - 1]} =~  $player_2 ]] || [[ ! $answer1 =~ ^[1-9]$ ]]
+    then
+      echo try again!!!
+      (( turn -- ))
+    else
+# inserting player1 answer
+      spots[$answer1 - 1]=$player_1
+      print_board
+    fi
+  else
+    read -p 'player 2 turn:' answer2
+# checking if number is valid and spot is not already taken (player2)
+    if [[ ${spots[$answer2 - 1]} =~  $player_2 ]] || [[ ${spots[$answer2 - 1]} =~  $player_1 ]] || [[ ! $answer2 =~ ^[1-9]$ ]]
+    then
+      echo try again!!!
+      (( turn -- ))
+    else
+# inserting player1 answer
+      spots[$answer2 - 1]=$player_2
+      print_board
+    fi
+  fi
+  (( turn++ ))
+  game_winner
+done
+
+

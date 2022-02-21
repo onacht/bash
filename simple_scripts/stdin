@@ -1,0 +1,5 @@
+#!/bin/bash
+#takes data from stdin file
+echo here is the third line
+cat /dev/stdin | head -3 | tail -1
+ 

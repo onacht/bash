@@ -1,0 +1,13 @@
+#!/bin/bash
+#print ay number between specific
+NUMBER=$RANDOM
+while :;
+do 
+  if (( $NUMBER >= 0 && $NUMBER <= 100 ));
+  then
+       echo $NUMBER
+       break
+  else
+       NUMBER=$RANDOM
+  fi
+done

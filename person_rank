@@ -1,0 +1,120 @@
+#!/bin/bash
+# written by Ofek Nacht
+# 18/12/2022
+#
+# tweets person rank
+file=$( cat /home/onacht/my_scripts/tweets )
+names=$( echo "$file" | awk '{print$1}' )    # tweets writers
+tweets=$( echo "$file" | awk -F "\t" '{print$2}' )
+namesarr=($names)  # all the writers array
+sumarr=()          # array for super rank calc
+point_worth=()     # array for every writer tag value
+allment=""
+finle=""
+
+# function that greps who was mentioned in the tweets (all the tags )
+# looping through every name
+mention() {
+for (( i=0; i<${#namesarr[@]}; i++ ))
+do
+  mention=$( echo "$tweets" | grep -own "${namesarr[$i]}" )
+  allment+="$mention "  #every tagged person
+done
+}
+
+# function that fixes the display 
+# of tweeter writers and tagged
+tweet_writer() {
+for (( i=0; i<${#namesarr[@]}; i++ ))
+do
+  sumarr[i]=0
+  d=$(( $i + 1 ))
+  newall=$( echo "$allment" | awk '{RS=" "; print}' | sed -e "s/"$d"/${namesarr[$i]}/g; s/:/ has mentioned /g" ) 
+  finle+="$( echo "$newall" | grep -v [0-9] ) \n "
+done
+}
+
+# how many people each writer  mentioned and what every pointer is worth (base rating is 1 )
+pointers() {
+for (( i=0; i<${#namesarr[@]}; i++ ))
+do
+  point=$( echo -e "$finle" | sed 's/^ //g' | head -n -1 | awk '{print$1}' | grep ${namesarr[$i]} )
+  num_points=$( echo $point | wc -w )   #checking multiplay tagged
+  point_worth[i]=$( bc -l <<< 1/$num_points )
+done
+}
+
+# fuction that crosses values to index
+# and calculate super rank using values from calc func
+array_index() {
+# looping in order to determine pointer value for each man
+# checking mentioning index
+for ((j=0; j<${#namesarr[@]}; j++ ))
+do
+   if [[ ${namesarr[$j]} == $give ]]
+   then
+       point_give=${point_worth[$j]}
+   fi
+done
+# using the previous loop 
+# checking mentioned index 
+for ((k=0; k<${#namesarr[@]}; k++ ))
+do
+   if [[ ${namesarr[$k]} == $get ]]
+   then
+       sumarr[$k]=$( bc -l <<< ${sumarr[$k]}+$point_give )
+   fi
+done
+}
+
+# loopig through all of the people who was mentiond
+# including double mentions
+calc() {
+allment_line=$( echo -e "$finle" | sed 's/^ //g' | head -n -1 | wc -l )
+# looping through each line in order to get
+# the tweet writter and the tagged person
+for (( i=1; i<=$allment_line; i++ ))
+do
+  one_line=$( echo -e "$finle" | sed 's/^ //g' | head -n -1 | sed "$i"'q;d' )
+  give=$( echo $one_line | awk '{print$1}' )
+  get=$( echo $one_line | awk '{print$4}' )
+# calculating superrank using function
+  array_index
+done
+}
+
+# sorting superrank
+sort_arr() {
+for (( i=0; i<${#sumarr[@]}; i++ )) 
+do
+  for (( j=$i + 1; j<${#sumarr[@]}; j++ ))
+  do
+    if (( $(echo "${sumarr[$i]} < ${sumarr[$j]}" | bc -l ) )) # switching positions if number[0] less then number[1]
+    then
+      a=${sumarr[$i]}     # sorting sum array
+      b=${sumarr[$j]}
+      c=${namesarr[$i]}   # sorting name array
+      d=${namesarr[$j]}
+      sumarr[$i]=$b
+      sumarr[$j]=$a
+      namesarr[$i]=$d
+      namesarr[$j]=$c
+    fi
+  done
+done
+}
+
+# main
+mention
+tweet_writer
+pointers
+calc
+sort_arr
+k=1
+
+# loop through and show leaderboard 
+for (( i=0; i<${#sumarr[@]}; i++ ))
+do
+  echo "${namesarr[$i]} ranked $k with a page rank of ${sumarr[$i]}"
+  (( k++ ))
+done

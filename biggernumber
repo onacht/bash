@@ -1,0 +1,17 @@
+#!/bin/bash
+# print bigger number
+
+if [ -e $1 ]
+then
+  echo " file exist "
+elif [ -r $1 ]
+then
+  echo " $1 has read perm "
+fi
+
+if [ -x $1 ]
+then 
+  echo " $1 has read perm "
+else 
+  echo no
+fi 

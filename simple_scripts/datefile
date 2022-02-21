@@ -1,0 +1,10 @@
+#!/bin/bash
+#create file with current date
+
+FILEDATE=$( date +%Y-%m-%d )
+echo $FILEDATE
+for  i in "$@" ;
+do
+echo $i
+touch /home/onacht/"$i"_"$FILEDATE".txt 
+done

@@ -1,0 +1,32 @@
+#!/bin/bash
+# print random word
+# written by ofek nacht
+# enter specific length
+echo "number of arg:$#" 
+if [ $# -eq 2 ]
+then
+  echo -e "special number is $2\n"
+# match words length to user demand
+  MATCHWORD=$(grep -o -w '\w\{'$2'\}' $1)
+  echo -e "list of matching words:\n$MATCHWORD"
+# number of special words
+  SNUMWORD=$(echo $MATCHWORD | wc -w)
+  echo "number oif random words is:$SNUMWORD"
+# shuffle SPECIAL random number
+  SNUMRAND=$(shuf -i 1-$SNUMWORD -n 1)
+  echo "random number is:$SNUMRAND"
+# print random SPECIAL word
+  RANDWORD=$(echo $MATCHWORD | awk '{print}' ORS=" " | awk  '{print$'$SNUMRAND'}')
+  echo "random word is:$RANDWORD"
+else
+# number pf wprds in a file
+  NUMWORD=$(wc -w  < $1)
+# shuffle randome number
+  NUMRAND=$(shuf -i 1-$NUMWORD -n 1)
+  echo $NUMRAND
+# print random word
+  RANDWORD=$(cat $1 | awk '{print}' ORS=" " | awk  '{print$'$NUMRAND'}')
+  echo $RANDWORD
+fi
+
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+#asking user name last name fav color password
+echo hello
+read NAME
+read -sp 'enter password: ' PASS 
+echo
+read -p 'enter fav color: ' COLO
+echo "name: $NAME"
+echo "SHHHHHH!! $PASS"
+echo "fav colo: $COLO"
+echo "age is :  $1"

@@ -1,0 +1,7 @@
+#!/bin/bash
+# timestamp differnce
+diff=$(( $1 - $2 ))
+echo $diff
+hours=$(( $diff / 60 ))
+minutes=$(( $diff % 60 ))
+echo "$hours hours and $minutes minutes"

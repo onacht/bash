@@ -1,0 +1,58 @@
+#!/bin/bash
+# ofek nacht 30/11/202
+# mastermind game!!!!
+# generate random code
+CODE=$( shuf -i 1-8 -n 5 | awk '{ORS=" "; print$0}' )
+echo $CODE
+codearr=($CODE)
+# looping 5 time for number of tries
+i=1
+while [ $i -le 8 ]
+do
+  d=0
+  exactly=""
+  exist=""
+  dont=""
+# asking for user guess
+  read -p 'please select 5 numbers between 1-8 : ' ANSWER
+  arr=($ANSWER)
+
+# checking if user enterd right amount of numbers
+  if [ ${#arr[@]} -ne 5 ]
+  then
+    echo try again!!!
+  else
+# check if number is in an exact place 
+    for k in ${arr[@]}
+    do
+      if [ $k ==  ${codearr[$d]} ]
+      then
+         exactly+="exactly "
+# checking if number exist
+      elif [[ " ${codearr[@]} " =~ $k ]]
+      then
+         exist+="exist "
+# if number doesnt exist
+      else
+        dont+="dont "
+      fi
+      (( d++ ))
+    done
+  (( i++ ))
+# turn number
+  c=$(( $i - 1 ))
+  echo "try number $c\8"
+# print guessing results
+  echo $exactly $exist $dont
+# match result
+  if [[ $exactly =~ 'exactly exactly exactly exactly exactly' ]]
+  then 
+    echo you cracked the code
+    i=9
+  elif [ $i -eq 9 ]
+  then
+    echo game over
+    echo better luck next time
+  fi
+  fi
+done

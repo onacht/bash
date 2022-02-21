@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# check weher num is
+
+shuffle=$( shuf -i 1-9 -n 9 )
+echo $shuffle
+p=1
+read answer
+for i in $shuffle
+do
+  if [[ $i == $answer ]]
+  then
+    echo $p
+  else
+    (( p++ ))
+  fi
+done

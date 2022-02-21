@@ -1,0 +1,15 @@
+#!/bin/bash
+TODAY=$( date +%A )
+echo $TODAY
+case $TODAY in
+  Sunday)
+    echo today is sun
+    ;;
+  Monday)
+    echo today is mon
+    ;;
+esac
+if [ $TODAY = Sunday ]
+then
+  echo jgjfgur
+fi

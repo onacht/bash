@@ -1,0 +1,29 @@
+#!/bin/bash
+# check if its a file and
+# how much it weights or 
+# how much files in a directory
+
+#recieving directory
+for VAL in $1/*
+do
+# file=print size
+  if [ -f $VAL ]
+  then
+    FILESIZE=$( ls -lh $VAL | awk '{print$5}' )
+    echo "$VAL size is : $FILESIZE"
+  else
+    FILES=$( ls $VAL | wc -l )
+    echo "number of files : $FILES"
+# checking size of files inside directory
+      for INSVAL in $VAL/*
+      do
+        if [ -f $INSVAL ]
+        then
+          IFILESIZE=$( ls -lh $INSVAL | awk '{print$5}' )
+          echo "$INSVAL size : $IFILESIZE"
+        else
+          echo "$INSVAL is a directoryi"
+        fi
+      done
+    fi
+done
